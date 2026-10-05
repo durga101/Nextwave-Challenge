@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build Your First AI Project in 60 Minutes — Free Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17163F; --ink-2:#4A4875; --paper:#FFFFFF; --surface:#F1F0FB; --line:#DCDAF2;
+  --marigold:#F4A300; --marigold-ink:#5A3A00; --teal:#0F8B6C; --violet:#6C5CE7; --slate:#9A98B8;
+  --dot-empty:#E6E4F6; --danger:#B42318; --ok-bg:#E3F5EE;
+  --display:"Bricolage Grotesque", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#F2F1FF; --ink-2:#B9B7DA; --paper:#121130; --surface:#1C1B44; --line:#2E2C63;
+    --dot-empty:#26245A; --ok-bg:#103B30; --marigold-ink:#2A1B00;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F2F1FF; --ink-2:#B9B7DA; --paper:#121130; --surface:#1C1B44; --line:#2E2C63;
+  --dot-empty:#26245A; --ok-bg:#103B30; --marigold-ink:#2A1B00;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--marigold);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* top bar */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em;white-space:nowrap}
+.brand b{color:var(--marigold)}
+nav.tabs{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{background:none;border:0;padding:8px 12px;border-radius:999px;cursor:pointer;color:var(--ink-2);font-weight:700;font-size:15px;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.mode{font-size:12.5px;color:var(--ink-2);padding:3px 9px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+
+section.view{display:none;padding:36px 0 64px}
+section.view.active{display:block}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:start}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(36px,5.6vw,62px);line-height:1.02;letter-spacing:-.025em;margin:0 0 18px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,32px);line-height:1.15;letter-spacing:-.015em;margin:0 0 14px}
+h3{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 8px}
+.lede{font-size:19px;color:var(--ink-2);max-width:34em;margin:0 0 22px}
+.when{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 26px;padding:0;list-style:none;font-weight:700}
+.when li{display:flex;align-items:center;gap:8px}
+.when svg{flex:none}
+
+/* seat map: the one bold element */
+.seats{background:var(--surface);border-radius:20px;padding:22px}
+.seat-count{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.seat-count .n{font-family:var(--display);font-weight:800;font-size:56px;line-height:1;font-variant-numeric:tabular-nums}
+.seat-count .of{font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink-2)}
+.seat-sub{color:var(--ink-2);font-size:15px;margin:0 0 16px}
+.grid500{display:grid;grid-template-columns:repeat(25,1fr);gap:4px}
+.grid500 i{display:block;aspect-ratio:1;border-radius:50%;background:var(--dot-empty);transition:background .25s}
+.grid500 i.whatsapp{background:var(--teal)} .grid500 i.referral{background:var(--marigold)}
+.grid500 i.club,.grid500 i.email{background:var(--violet)} .grid500 i.other{background:var(--slate)}
+.grid500 i.me{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px;font-size:14px;color:var(--ink-2);list-style:none;padding:0}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+/* form */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form .full{grid-column:1/-1}
+label{display:block;font-weight:700;font-size:14.5px;margin-bottom:5px}
+label .opt{font-weight:400;color:var(--ink-2)}
+input,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);font-size:16px}
+input:focus,select:focus{border-color:var(--ink);outline:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:14px 22px;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--marigold);color:#2A1B00}
+.btn-primary:hover{filter:brightness(.96)}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-wa{background:var(--teal);color:#fff}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.6;cursor:wait}
+.err{color:var(--danger);font-size:14.5px;min-height:1.2em;margin:0}
+.fine{font-size:13.5px;color:var(--ink-2);margin:0}
+
+/* pass */
+.pass{display:grid;grid-template-columns:1fr auto;border-radius:20px;overflow:hidden;background:#17163F;color:#fff;border:1px solid var(--line)}
+.pass .main{padding:24px 24px 22px}
+.pass .stub{background:var(--marigold);color:#2A1B00;padding:24px 22px;display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:170px;border-left:2px dashed rgba(0,0,0,.25)}
+.pass .code{font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.pass .stub small{font-size:13px;font-weight:700}
+.pass h3{color:#fff}
+.pass p{margin:0 0 6px;color:rgba(255,255,255,.82)}
+.share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.unlock{margin-top:20px;background:var(--surface);border-radius:16px;padding:18px 20px}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 6px}
+.steps3 span{height:10px;border-radius:99px;background:var(--dot-empty)}
+.steps3 span.on{background:var(--marigold)}
+
+/* agenda */
+.agenda{margin-top:56px}
+.agenda ol{list-style:none;padding:0;margin:18px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:a}
+.agenda li{border-top:3px solid var(--ink);padding-top:12px}
+.agenda .t{font-family:var(--display);font-weight:800;font-size:15px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.agenda p{margin:4px 0 0;color:var(--ink-2);font-size:15.5px}
+.why{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.why p{color:var(--ink-2);margin:0}
+
+/* leaderboard */
+.lb-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:24px}
+.goalbar{height:16px;border-radius:99px;background:var(--dot-empty);overflow:hidden;margin:10px 0 6px}
+.goalbar span{display:block;height:100%;background:var(--marigold);border-radius:99px;transition:width .6s}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.rank{list-style:none;padding:0;margin:0}
+.rank li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rank li:last-child{border-bottom:0}
+.rank .pos{font-family:var(--display);font-weight:800;color:var(--ink-2)}
+.rank li:nth-child(1) .pos{color:var(--marigold)}
+.rank .nm{font-weight:700;line-height:1.25}
+.rank .nm small{display:block;font-weight:400;color:var(--ink-2);font-size:13.5px}
+.rank .ct{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.empty{color:var(--ink-2);font-size:15px;padding:12px 0}
+.prize{font-size:14px;color:var(--ink-2);margin-top:10px}
+
+/* ambassador */
+.amb-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+.tpl{background:var(--surface);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.tpl h3{font-size:16px}
+.tpl pre{white-space:pre-wrap;font-family:var(--body);font-size:15px;margin:0 0 10px;color:var(--ink)}
+
+/* dashboard */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.kpi{background:var(--surface);border-radius:16px;padding:16px 18px}
+.kpi .v{font-family:var(--display);font-weight:800;font-size:34px;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:14px;color:var(--ink-2)}
+.dash2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.barrow{display:grid;grid-template-columns:120px 1fr 60px;gap:10px;align-items:center;margin:12px 0}
+.barrow .lbl{font-weight:700;font-size:15px}
+.track{position:relative;height:22px;background:var(--dot-empty);border-radius:6px}
+.track .fill{position:absolute;inset:0 auto 0 0;border-radius:6px}
+.track .target{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:2px}
+.barrow .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.days{display:flex;align-items:flex-end;gap:10px;height:170px;margin-top:14px;padding-bottom:26px;position:relative}
+.days .d{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.days .col{width:100%;max-width:48px;background:var(--ink);border-radius:6px 6px 2px 2px;min-height:2px}
+.days .d small{font-size:12.5px;color:var(--ink-2)}
+.days .d b{font-size:13px;font-variant-numeric:tabular-nums}
+.note{font-size:13.5px;color:var(--ink-2);margin-top:20px;max-width:60em}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast.show{opacity:1}
+.hidden{display:none!important}
+
+@media (max-width:860px){
+  .hero,.amb-grid,.dash2{grid-template-columns:1fr}
+  .cols3,.why{grid-template-columns:1fr}
+  .agenda ol{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid500{grid-template-columns:repeat(20,1fr);gap:3px}
+  .brand span.long{display:none}
+}
+@media (max-width:520px){
+  form{grid-template-columns:1fr}
+  .pass{grid-template-columns:1fr}
+  .pass .stub{border-left:0;border-top:2px dashed rgba(0,0,0,.25);flex-direction:row;gap:14px}
+  .mode{display:none}
+  .barrow{grid-template-columns:90px 1fr 46px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">First<b>AI</b><span class="long"> in 60</span></div>
+    <span class="mode" id="mode" title="Where registrations are stored">Connecting…</span>
+    <nav class="tabs" aria-label="Sections">
+      <button data-view="register" aria-current="page">Register</button>
+      <button data-view="board">Leaderboard</button>
+      <button data-view="amb">Ambassadors</button>
+      <button data-view="dash">Dashboard</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- REGISTER -->
+<section class="view active" id="v-register">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Build your first AI project in 60 minutes.</h1>
+        <p class="lede">A free live workshop for final-year engineering students. You leave with a working AI Resume Reviewer, deployed at your own link, ready to show in placement interviews.</p>
+        <ul class="when">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3"/></svg>Live online, free</li>
+        </ul>
+
+        <div id="formCard" class="card">
+          <form id="regForm" novalidate>
+            <div class="full"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" required maxlength="60"></div>
+            <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="80"></div>
+            <div><label for="f-phone">WhatsApp number</label><input id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" required maxlength="13" placeholder="10-digit number"></div>
+            <div class="full"><label for="f-college">College</label><input id="f-college" name="college" list="colleges" required maxlength="70" placeholder="Start typing your college"></div>
+            <div><label for="f-branch">Branch</label>
+              <select id="f-branch" name="branch" required>
+                <option value="">Choose</option><option>CSE</option><option>IT</option><option>AI &amp; DS</option><option>ECE</option><option>EEE</option><option>Mechanical</option><option>Civil</option><option>Other</option>
+              </select></div>
+            <div><label for="f-year">Year</label>
+              <select id="f-year" name="year" required>
+                <option value="4">Final year</option><option value="3">Third year</option><option value="grad">Graduated (2026)</option>
+              </select></div>
+            <div><label for="f-ref">Referral code <span class="opt">(optional)</span></label><input id="f-ref" name="ref" maxlength="8" autocapitalize="characters" placeholder="e.g. RAVI7K"></div>
+            <div><label for="f-src">Where did you hear about this?</label>
+              <select id="f-src" name="src">
+                <option value="whatsapp">Class WhatsApp group</option><option value="referral">A friend sent me</option><option value="club">College club</option><option value="email">Email from placement cell</option><option value="other">Somewhere else</option>
+              </select></div>
+            <p class="err full" id="formErr" role="alert"></p>
+            <div class="full"><button class="btn btn-primary" id="regBtn" type="submit" style="width:100%">Reserve my free seat</button></div>
+            <p class="fine full">We use your WhatsApp number only for the joining link and two reminders.</p>
+          </form>
+        </div>
+
+        <div id="passCard" class="hidden">
+          <div class="pass">
+            <div class="main">
+              <h3 id="passName">You're in.</h3>
+              <p>Seat <b id="passSeat">#—</b> of 500 reserved.</p>
+              <p>The joining link comes on WhatsApp 1 hour before.</p>
+            </div>
+            <div class="stub"><small>Your referral code</small><div class="code" id="passCode">——</div></div>
+          </div>
+          <div class="share-row">
+            <a class="btn btn-wa" id="waShare" target="_blank" rel="noopener">Share on WhatsApp</a>
+            <button class="btn btn-ghost" id="copyMsg" type="button">Copy invite message</button>
+          </div>
+          <div class="unlock">
+            <h3>Bring 3 friends, unlock the bonus pack</h3>
+            <p class="fine" style="font-size:15px">When 3 friends register with your code, you get the 50-prompt AI Project Pack and a priority slot in the live Q&amp;A. Every 3 referrals also enters you in the ₹100 voucher draw.</p>
+            <div class="steps3" id="steps3"><span></span><span></span><span></span></div>
+            <p class="fine" id="refStatus">0 of 3 friends joined so far.</p>
+          </div>
+          <p style="margin-top:14px"><button class="btn btn-ghost" id="notMe" type="button" style="padding:8px 14px;font-size:14px">Register someone else on this device</button></p>
+        </div>
+      </div>
+
+      <aside class="seats" aria-label="Seats claimed">
+        <div class="seat-count"><span class="n" id="seatN">0</span><span class="of">/ 500 seats claimed</span></div>
+        <p class="seat-sub" id="seatSub">Every dot is a student. Colour shows how they found us.</p>
+        <div class="grid500" id="grid500" aria-hidden="true"></div>
+        <ul class="legend">
+          <li><i style="background:var(--teal)"></i>Class WhatsApp</li>
+          <li><i style="background:var(--marigold)"></i>Friend referral</li>
+          <li><i style="background:var(--violet)"></i>Club or email</li>
+          <li><i style="background:var(--slate)"></i>Other</li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="agenda">
+      <h2>What happens in the 60 minutes</h2>
+      <ol>
+        <li><span class="t">0–10 min</span><h3>Set up</h3><p>Free accounts only. No installs, no coding experience needed.</p></li>
+        <li><span class="t">10–35 min</span><h3>Build</h3><p>Create an AI Resume Reviewer that scores a resume and suggests fixes.</p></li>
+        <li><span class="t">35–50 min</span><h3>Deploy</h3><p>Put it live on the internet at your own shareable link.</p></li>
+        <li><span class="t">50–60 min</span><h3>Show it off</h3><p>Add it to your resume and LinkedIn, with the exact line to write.</p></li>
+      </ol>
+    </div>
+
+    <div class="why">
+      <div><h3>Proof, not a certificate</h3><p>Interviewers ask "what have you built?". You'll have a live link to open on the spot.</p></div>
+      <div><h3>Any branch works</h3><p>ECE, EEE and Mech students welcome. If you can use WhatsApp, you can follow along.</p></div>
+      <div><h3>Just one hour</h3><p>Short enough to fit around classes. Recording sent to everyone who registers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section class="view" id="v-board">
+  <div class="wrap">
+    <div class="lb-head">
+      <div style="flex:1;min-width:260px">
+        <h2>Race to 500</h2>
+        <div class="goalbar"><span id="goalFill" style="width:0"></span></div>
+        <p class="fine" id="goalText">0 registered. 500 to go.</p>
+      </div>
+    </div>
+    <div class="cols3">
+      <div class="card"><h3>Top colleges</h3><ol class="rank" id="lbColleges"></ol></div>
+      <div class="card"><h3>Top ambassadors</h3><ol class="rank" id="lbAmbs"></ol>
+        <p class="prize">Prizes on Day 7: ₹500, ₹400 and ₹300 vouchers for the top three.</p></div>
+      <div class="card"><h3>Top student referrers</h3><ol class="rank" id="lbRefs"></ol>
+        <p class="prize">Every 3 referrals is one entry in the ₹100 voucher draw (6 winners).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- AMBASSADORS -->
+<section class="view" id="v-amb">
+  <div class="wrap">
+    <div class="amb-grid">
+      <div>
+        <h2>Campus ambassadors</h2>
+        <p class="lede" style="font-size:17px">One student per college. You post in your class WhatsApp groups, we track every sign-up that uses your code. Top three on Day 7 win vouchers, and everyone with 15+ sign-ups gets a NxtWave ambassador certificate and LinkedIn recommendation.</p>
+        <div class="card" id="ambFormCard">
+          <form id="ambForm" novalidate>
+            <div class="full"><label for="a-name">Your name</label><input id="a-name" required maxlength="60"></div>
+            <div class="full"><label for="a-college">College</label><input id="a-college" list="colleges" required maxlength="70"></div>
+            <p class="err full" id="ambErr" role="alert"></p>
+            <div class="full"><button class="btn btn-ink" type="submit" style="width:100%">Get my ambassador code</button></div>
+          </form>
+        </div>
+        <div id="ambDone" class="hidden">
+          <div class="pass"><div class="main"><h3 id="ambHello">Welcome aboard.</h3><p>Share the posts on the right in your groups. Your sign-ups show on the leaderboard live.</p><p id="ambStat">0 sign-ups so far.</p></div>
+          <div class="stub"><small>Ambassador code</small><div class="code" id="ambCode">——</div></div></div>
+        </div>
+      </div>
+      <div>
+        <h2>Ready-to-send posts</h2>
+        <p class="fine" style="margin-bottom:14px">Your code is filled in automatically once you have one.</p>
+        <div id="tpls"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="view" id="v-dash">
+  <div class="wrap">
+    <h2>Campaign dashboard</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="v" id="kTotal">0</div><div class="l">Registrations</div></div>
+      <div class="kpi"><div class="v" id="kGoal">0%</div><div class="l">Of the 500 goal</div></div>
+      <div class="kpi"><div class="v" id="kViral">0%</div><div class="l">Came from a friend's code</div></div>
+      <div class="kpi"><div class="v" id="kAmb">0</div><div class="l">Active ambassadors</div></div>
+    </div>
+    <div class="dash2">
+      <div class="card">
+        <h3>By channel, against plan</h3>
+        <p class="fine">Black marker = planned registrations for that channel.</p>
+        <div id="srcBars"></div>
+      </div>
+      <div class="card">
+        <h3>Registrations per day</h3>
+        <p class="fine">Last 7 days.</p>
+        <div class="days" id="dayBars"></div>
+      </div>
+      <div class="card">
+        <h3>By branch</h3>
+        <div id="branchBars"></div>
+      </div>
+      <div class="card">
+        <h3>What to do next</h3>
+        <ul id="advice" style="padding-left:20px;margin:8px 0 0;color:var(--ink-2)"></ul>
+      </div>
+    </div>
+    <p class="note">Privacy: the shared tracker stores first name and initial, college, branch, source and codes, plus a one-way hash of the email to block duplicates. Email and phone numbers are not written to the shared tracker; in the real campaign they would go to NxtWave's CRM. The starting entries are simulated demo data, since this challenge is a simulation.</p>
+  </div>
+</section>
+</main>
+
+<datalist id="colleges"></datalist>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+const GOAL = 500;
+const PLAN = {whatsapp:300, referral:130, club:70, email:50, other:0};
+const SRC_LABEL = {whatsapp:"WhatsApp", referral:"Referral", club:"Club", email:"Email", other:"Other"};
+const SRC_COLOR = {whatsapp:"var(--teal)", referral:"var(--marigold)", club:"var(--violet)", email:"var(--violet)", other:"var(--slate)"};
+const COLLEGES = ["JNTU Kakinada","Aditya Engineering College","GIET Rajahmundry","Pragati Engineering College","Vignan's Institute of IT","GVP College of Engineering","Andhra University College of Engineering","CVR College of Engineering","VNR VJIET","CBIT Hyderabad","MLR Institute of Technology","Malla Reddy Engineering College","SRKR Engineering College","Vishnu Institute of Technology","KL University","VR Siddhartha Engineering College"];
+const $ = s => document.querySelector(s);
+const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+const dl = $("#colleges"); COLLEGES.forEach(c => { const o = document.createElement("option"); o.value = c; dl.appendChild(o); });
+
+/* ---------- small helpers ---------- */
+const ls = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), 2200); }
+function shortName(full){ const p = full.trim().split(/\s+/); return p.length > 1 ? p[0] + " " + p[p.length-1][0].toUpperCase() + "." : p[0]; }
+function makeCode(name){
+  const base = (name.replace(/[^a-zA-Z]/g,"").toUpperCase() + "XXXX").slice(0,4);
+  const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  let s = ""; for (let i=0;i<2;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return base + s;
+}
+async function hashEmail(email){
+  const data = new TextEncoder().encode(email.trim().toLowerCase());
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(buf)).slice(0,16).map(b=>b.toString(16).padStart(2,"0")).join("");
+  } catch(e){ let h = 0; for (const b of data) h = (h*31 + b) >>> 0; return "h" + h.toString(16); }
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); toast("Copied"); return; } catch(e){}
+  const ta = document.createElement("textarea"); ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); toast("Copied"); } catch(e){ toast("Select and copy the text manually"); } ta.remove();
+}
+
+/* ---------- storage: shared db when available, this-browser demo otherwise ---------- */
+function demoSeed(){
+  const now = Date.now(), day = 86400000;
+  const ambs = [["DIVY4K","Divya R.","JNTU Kakinada"],["KIRA9P","Kiran T.","Aditya Engineering College"],["SAIT7M","Sai Teja M.","GVP College of Engineering"],["ANUS3H","Anusha K.","Pragati Engineering College"],["RAHU5Q","Rahul V.","CBIT Hyderabad"],["MEGH2W","Meghana P.","VNR VJIET"]].map(a=>({code:a[0],name:a[1],college:a[2],ts:now-6*day,demo:true}));
+  const firsts = ["Arjun","Sneha","Vamsi","Keerthi","Harsha","Lakshmi","Pavan","Swathi","Rohit","Bhavya","Naveen","Pooja","Teja","Divya","Ganesh","Mounika","Charan","Sravani","Ajay","Ramya"];
+  const branches = ["CSE","CSE","CSE","IT","AI & DS","ECE","ECE","EEE","Mechanical"];
+  const regs = []; let seed = 7; const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
+  for (let i=0;i<64;i++){
+    const a = ambs[Math.floor(rnd()*ambs.length)]; const r = rnd();
+    let src = r < .55 ? "whatsapp" : r < .72 ? "club" : r < .82 ? "email" : "referral";
+    const reg = {code:"D"+(1000+i), name: firsts[i%firsts.length]+" "+"ABCDEGKLMNPRSTV"[Math.floor(rnd()*15)]+".", college: src==="whatsapp" ? a.college : COLLEGES[Math.floor(rnd()*8)],
+      branch: branches[Math.floor(rnd()*branches.length)], year:"4", src, amb: src==="whatsapp" ? a.code : "", ref:"", ts: now - Math.floor(rnd()*5*day) - 3600000, demo:true};
+    regs.push(reg);
+  }
+  regs.filter(r=>r.src==="referral").forEach((r,i)=>{ r.ref = regs[i*3].code; });
+  return {regs, ambs};
+}
+
+const LocalStore = {
+  kind:"local",
+  _state:null, _subs:[],
+  _load(){ if (!this._state){ this._state = ls.get("firstai:store"); if (!this._state){ this._state = demoSeed(); this._save(); } } return this._state; },
+  _save(){ ls.set("firstai:store", this._state); this._subs.forEach(f=>f(this._state)); },
+  subscribe(fn){ this._subs.push(fn); fn(this._load()); },
+  async findReg(code){ return this._load().regs.find(r=>r.code===code) || null; },
+  async findAmb(code){ return this._load().ambs.find(a=>a.code===code) || null; },
+  async findEmail(h){ const r = this._load().regs.find(r=>r.eh===h); return r ? r.code : null; },
+  async addReg(reg){ this._load().regs.push(reg); this._save(); },
+  async addAmb(a){ this._load().ambs.push(a); this._save(); }
+};
+
+function RemoteStore(db){
+  const st = {regs:[], ambs:[]}; const subs = [];
+  const push = () => subs.forEach(f=>f(st));
+  return {
+    kind:"shared",
+    subscribe(fn){
+      subs.push(fn); fn(st);
+      if (subs.length > 1) return;
+      db.collection("regs").limit(1000).onSnapshot(s => { st.regs = s.docs.map(d=>Object.assign({code:d.id}, d.data())); push(); }, e => console.warn("regs", e));
+      db.collection("ambs").limit(300).onSnapshot(s => { st.ambs = s.docs.map(d=>Object.assign({code:d.id}, d.data())); push(); }, e => console.warn("ambs", e));
+    },
+    async findReg(code){ const s = await db.doc("regs/"+code).get(); return s.exists ? Object.assign({code}, s.data()) : null; },
+    async findAmb(code){ const s = await db.doc("ambs/"+code).get(); return s.exists ? Object.assign({code}, s.data()) : null; },
+    async findEmail(h){ const s = await db.doc("emails/"+h).get(); return s.exists ? s.data().code : null; },
+    async addReg(reg){ const body = Object.assign({}, reg); delete body.code; await db.doc("regs/"+reg.code).set(body); if (reg.eh) await db.doc("emails/"+reg.eh).set({code:reg.code}); },
+    async addAmb(a){ const body = Object.assign({}, a); delete body.code; await db.doc("ambs/"+a.code).set(body); }
+  };
+}
+
+let store = null, data = {regs:[], ambs:[]};
+const modeEl = $("#mode");
+function setMode(){ modeEl.textContent = store.kind === "shared" ? "Live shared tracker" : "Demo mode (this browser)"; }
+
+async function init(){
+  let db = null, user = null;
+  try {
+    if (window.claude && typeof window.claude.use === "function"){
+      [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    }
+  } catch(e){ db = null; }
+  let canWrite = null;
+  try { canWrite = user && typeof user.can === "function" ? await user.can("data.write") : null; } catch(e){}
+  store = (db && canWrite !== false) ? RemoteStore(db) : LocalStore;
+  setMode();
+  store.subscribe(s => { data = s; renderAll(); });
+}
+async function withFallback(fn){
+  try { return await fn(store); }
+  catch(e){
+    if (store.kind === "shared" && e && (e.code === "invalid_argument" || e.code === "revoked" || e.code === "not_granted")){
+      store = LocalStore; setMode(); store.subscribe(s => { data = s; renderAll(); });
+      toast("Switched to demo mode on this browser"); return await fn(store);
+    }
+    throw e;
+  }
+}
+
+/* ---------- views ---------- */
+const tabs = document.querySelectorAll("nav.tabs button");
+function show(view){
+  tabs.forEach(b => b.setAttribute("aria-current", b.dataset.view === view ? "page" : "false"));
+  document.querySelectorAll("section.view").forEach(s => s.classList.toggle("active", s.id === "v-"+view));
+  window.scrollTo({top:0});
+}
+tabs.forEach(b => b.addEventListener("click", () => show(b.dataset.view)));
+
+/* ---------- seat grid ---------- */
+const grid = $("#grid500"); const dots = [];
+for (let i=0;i<GOAL;i++){ const d = document.createElement("i"); grid.appendChild(d); dots.push(d); }
+let firstPaint = true;
+function renderSeats(){
+  const regs = data.regs.slice().sort((a,b)=>a.ts-b.ts);
+  const my = ls.get("firstai:me");
+  const n = regs.length;
+  const apply = () => dots.forEach((d,i) => { const r = regs[i]; d.className = r ? (r.src||"other") + (my && r.code===my.code ? " me" : "") : ""; });
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (firstPaint && n && !reduce){
+    firstPaint = false; let i = 0;
+    const step = () => { const end = Math.min(n, i + Math.ceil(n/24)); for (; i<end; i++){ const r = regs[i]; dots[i].className = (r.src||"other") + (my && r.code===my.code ? " me" : ""); } if (i<n) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  } else { if (n) firstPaint = false; apply(); }
+  $("#seatN").textContent = Math.min(n, 999);
+  $("#seatSub").textContent = n >= GOAL ? "Goal reached. Extra seats are open for late sign-ups." : (GOAL-n) + " seats left. Every dot is a student; colour shows how they found us.";
+}
+
+/* ---------- leaderboard ---------- */
+function rankList(ol, rows, emptyMsg){
+  ol.textContent = "";
+  if (!rows.length){ ol.appendChild(el("li","empty",emptyMsg)); return; }
+  rows.slice(0,8).forEach((r,i) => {
+    const li = el("li"); li.appendChild(el("span","pos", String(i+1)));
+    const nm = el("span","nm", r.name); if (r.sub){ nm.appendChild(el("small", null, r.sub)); }
+    li.appendChild(nm); li.appendChild(el("span","ct", String(r.count))); ol.appendChild(li);
+  });
+}
+function renderBoard(){
+  const n = data.regs.length; const pct = Math.min(100, Math.round(n/GOAL*100));
+  $("#goalFill").style.width = pct + "%";
+  $("#goalText").textContent = n + " registered. " + (n >= GOAL ? "Goal reached." : (GOAL-n) + " to go.");
+  const byCollege = {}; data.regs.forEach(r => { const k = (r.college||"Unknown").trim(); byCollege[k] = (byCollege[k]||0)+1; });
+  rankList($("#lbColleges"), Object.entries(byCollege).map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count), "No registrations yet.");
+  const ambCount = {}; data.regs.forEach(r => { if (r.amb) ambCount[r.amb] = (ambCount[r.amb]||0)+1; });
+  rankList($("#lbAmbs"), data.ambs.map(a=>({name:a.name, sub:a.college+" · "+a.code, count:ambCount[a.code]||0})).filter(a=>a.count>0).sort((a,b)=>b.count-a.count), "No ambassador sign-ups yet.");
+  const refCount = {}; data.regs.forEach(r => { if (r.ref) refCount[r.ref] = (refCount[r.ref]||0)+1; });
+  const byCode = {}; data.regs.forEach(r => byCode[r.code] = r);
+  rankList($("#lbRefs"), Object.entries(refCount).map(([code,count])=>({name:(byCode[code]||{}).name||code, sub:(byCode[code]||{}).college||"", count})).sort((a,b)=>b.count-a.count), "No friend referrals yet. Be the first.");
+}
+
+/* ---------- pass ---------- */
+function inviteText(code){
+  return "I just reserved a free seat at \"Build Your First AI Project in 60 Minutes\" by NxtWave. You leave with a live AI Resume Reviewer for your resume, before placements.\n\nRegister free and use my code " + code + " so we both get the bonus prompt pack.";
+}
+function renderPass(){
+  const me = ls.get("firstai:me");
+  $("#formCard").classList.toggle("hidden", !!me);
+  $("#passCard").classList.toggle("hidden", !me);
+  if (!me) return;
+  const sorted = data.regs.slice().sort((a,b)=>a.ts-b.ts);
+  const idx = sorted.findIndex(r=>r.code===me.code);
+  $("#passName").textContent = "You're in, " + me.first + ".";
+  $("#passSeat").textContent = "#" + (idx >= 0 ? idx+1 : "—");
+  $("#passCode").textContent = me.code;
+  $("#waShare").href = "https://wa.me/?text=" + encodeURIComponent(inviteText(me.code));
+  const friends = data.regs.filter(r=>r.ref===me.code).length;
+  document.querySelectorAll("#steps3 span").forEach((s,i)=>s.classList.toggle("on", i < Math.min(3,friends)));
+  $("#refStatus").textContent = friends >= 3 ? friends + " friends joined. Bonus pack unlocked; it arrives with your joining link." : friends + " of 3 friends joined so far.";
+}
+$("#copyMsg").addEventListener("click", () => { const me = ls.get("firstai:me"); if (me) copyText(inviteText(me.code)); });
+$("#notMe").addEventListener("click", () => { ls.del("firstai:me"); $("#regForm").reset(); renderAll(); });
+
+/* ---------- register ---------- */
+$("#regForm").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const f = ev.target, err = $("#formErr"), btn = $("#regBtn");
+  const v = k => (f.elements[k].value || "").trim();
+  err.textContent = "";
+  const phone = v("phone").replace(/\D/g,"").replace(/^91(?=\d{10}$)/,"");
+  if (v("name").length < 2) return (err.textContent = "Enter your full name.", f.elements.name.focus());
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email"))) return (err.textContent = "Enter a valid email, like name@gmail.com.", f.elements.email.focus());
+  if (!/^[6-9]\d{9}$/.test(phone)) return (err.textContent = "Enter a 10-digit Indian mobile number.", f.elements.phone.focus());
+  if (v("college").length < 3) return (err.textContent = "Enter your college name.", f.elements.college.focus());
+  if (!v("branch")) return (err.textContent = "Choose your branch.", f.elements.branch.focus());
+  btn.disabled = true; btn.textContent = "Reserving…";
+  try {
+    const eh = await hashEmail(v("email"));
+    const existing = await withFallback(s => s.findEmail(eh));
+    if (existing){
+      ls.set("firstai:me", {code: existing, first: v("name").split(/\s+/)[0]});
+      toast("You were already registered. Here's your code."); renderAll(); return;
+    }
+    let src = v("src"), ref = "", amb = "";
+    const refCode = v("ref").toUpperCase().replace(/[^A-Z0-9]/g,"");
+    if (refCode){
+      const a = await withFallback(s => s.findAmb(refCode));
+      if (a){ amb = refCode; if (src === "referral" || src === "other") src = "whatsapp"; }
+      else {
+        const r = await withFallback(s => s.findReg(refCode));
+        if (r){ ref = refCode; src = "referral"; }
+        else { err.textContent = "That referral code wasn't found. Check it, or leave it empty."; f.elements.ref.focus(); return; }
+      }
+    }
+    let code = makeCode(v("name"));
+    for (let i=0;i<4;i++){ const clash = await withFallback(s => s.findReg(code)); if (!clash) break; code = makeCode(v("name")); }
+    const reg = {code, name: shortName(v("name")), college: v("college"), branch: v("branch"), year: v("year"), src, ref, amb, ts: Date.now(), eh};
+    await withFallback(s => s.addReg(reg));
+    ls.set("firstai:me", {code, first: v("name").split(/\s+/)[0]});
+    renderAll(); toast("Seat reserved"); const pc = $("#passCard"); if (pc.scrollIntoView) pc.scrollIntoView({block:"center", behavior:"smooth"});
+  } catch(e){
+    console.error(e); err.textContent = "Couldn't save your registration. Check your connection and try again.";
+  } finally { btn.disabled = false; btn.textContent = "Reserve my free seat"; }
+});
+
+/* ---------- ambassadors ---------- */
+const TEMPLATES = [
+  {t:"Day 2, first post", b:"Hey everyone! NxtWave is running a FREE 60-min live workshop: \"Build Your First AI Project in 60 Minutes\".\n\nYou build an AI Resume Reviewer and put it live at your own link. Perfect project for placement interviews. No coding needed, any branch.\n\nRegister with code {CODE} (takes 1 minute)."},
+  {t:"Day 4, social proof", b:"Update: {COUNT}+ students from {COLLEGES} colleges have already registered for the free AI project workshop.\n\nIf you still don't have a project for your resume, this fixes it in one hour. Use code {CODE} when you register."},
+  {t:"Day 6, last call", b:"Last call! Seats for the free AI workshop are filling up ({LEFT} left out of 500).\n\n60 minutes, and you walk away with a live AI project link for your resume. Code: {CODE}"}
+];
+function renderTemplates(){
+  const me = ls.get("firstai:amb");
+  const code = me ? me.code : "YOURCODE";
+  const n = data.regs.length; const colleges = new Set(data.regs.map(r=>(r.college||"").trim())).size;
+  const box = $("#tpls"); box.textContent = "";
+  TEMPLATES.forEach(tp => {
+    const text = tp.b.replace(/\{CODE\}/g, code).replace("{COUNT}", Math.max(50, Math.floor(n/50)*50)).replace("{COLLEGES}", Math.max(5, colleges)).replace("{LEFT}", Math.max(0, GOAL-n));
+    const d = el("div","tpl"); d.appendChild(el("h3", null, tp.t)); d.appendChild(el("pre", null, text));
+    const row = el("div","share-row"); row.style.marginTop = "0";
+    const wa = el("a","btn btn-wa","Send on WhatsApp"); wa.href = "https://wa.me/?text=" + encodeURIComponent(text); wa.target = "_blank"; wa.rel = "noopener"; wa.style.padding = "9px 14px"; wa.style.fontSize = "15px";
+    const cp = el("button","btn btn-ghost","Copy"); cp.type = "button"; cp.style.padding = "9px 14px"; cp.style.fontSize = "15px"; cp.addEventListener("click", () => copyText(text));
+    row.appendChild(wa); row.appendChild(cp); d.appendChild(row); box.appendChild(d);
+  });
+  $("#ambFormCard").classList.toggle("hidden", !!me);
+  $("#ambDone").classList.toggle("hidden", !me);
+  if (me){
+    $("#ambHello").textContent = "Welcome aboard, " + me.first + ".";
+    $("#ambCode").textContent = me.code;
+    const c = data.regs.filter(r=>r.amb===me.code).length;
+    $("#ambStat").textContent = c + (c===1 ? " sign-up" : " sign-ups") + " with your code so far.";
+  }
+}
+$("#ambForm").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const name = $("#a-name").value.trim(), college = $("#a-college").value.trim(), err = $("#ambErr");
+  err.textContent = "";
+  if (name.length < 2) return (err.textContent = "Enter your name.");
+  if (college.length < 3) return (err.textContent = "Enter your college.");
+  try {
+    let code = makeCode(name);
+    for (let i=0;i<4;i++){ const a = await withFallback(s=>s.findAmb(code)); const r = await withFallback(s=>s.findReg(code)); if (!a && !r) break; code = makeCode(name); }
+    await withFallback(s => s.addAmb({code, name: shortName(name), college, ts: Date.now()}));
+    ls.set("firstai:amb", {code, first: name.split(/\s+/)[0]});
+    renderAll(); toast("Ambassador code created");
+  } catch(e){ console.error(e); err.textContent = "Couldn't create your code. Try again."; }
+});
+
+/* ---------- dashboard ---------- */
+function bars(container, rows, max, withTarget){
+  container.textContent = "";
+  rows.forEach(r => {
+    const row = el("div","barrow");
+    row.appendChild(el("span","lbl", r.label));
+    const tr = el("div","track"); const fill = el("div","fill"); fill.style.width = Math.min(100, r.value/max*100) + "%"; fill.style.background = r.color || "var(--ink)"; tr.appendChild(fill);
+    if (withTarget && r.target){ const t = el("div","target"); t.style.left = "calc(" + Math.min(100, r.target/max*100) + "% - 1px)"; t.title = "Plan: " + r.target; tr.appendChild(t); }
+    row.appendChild(tr); row.appendChild(el("span","num", withTarget && r.target ? r.value + "/" + r.target : String(r.value)));
+    container.appendChild(row);
+  });
+}
+function renderDash(){
+  const regs = data.regs, n = regs.length;
+  $("#kTotal").textContent = n;
+  $("#kGoal").textContent = Math.round(n/GOAL*100) + "%";
+  $("#kViral").textContent = n ? Math.round(regs.filter(r=>r.ref).length/n*100) + "%" : "0%";
+  const active = new Set(regs.filter(r=>r.amb).map(r=>r.amb)); $("#kAmb").textContent = active.size;
+
+  const bySrc = {whatsapp:0, referral:0, club:0, email:0, other:0}; regs.forEach(r => bySrc[r.src in bySrc ? r.src : "other"]++);
+  const srcRows = Object.keys(bySrc).filter(k => k !== "other" || bySrc.other).map(k => ({label:SRC_LABEL[k], value:bySrc[k], target:PLAN[k], color:SRC_COLOR[k]}));
+  bars($("#srcBars"), srcRows, 320, true);
+
+  const db = $("#dayBars"); db.textContent = "";
+  const start = new Date(); start.setHours(0,0,0,0);
+  const counts = []; for (let i=6;i>=0;i--){ const d0 = start.getTime() - i*86400000; counts.push({d:new Date(d0), c: regs.filter(r=>r.ts>=d0 && r.ts<d0+86400000).length}); }
+  const mx = Math.max(1, ...counts.map(x=>x.c));
+  counts.forEach(x => { const d = el("div","d"); d.appendChild(el("b", null, String(x.c))); const col = el("div","col"); col.style.height = (x.c/mx*100*0.78) + "%"; d.appendChild(col); d.appendChild(el("small", null, x.d.toLocaleDateString("en-IN",{weekday:"short"}))); db.appendChild(d); });
+
+  const byBr = {}; regs.forEach(r => byBr[r.branch||"Other"] = (byBr[r.branch||"Other"]||0)+1);
+  const brRows = Object.entries(byBr).sort((a,b)=>b[1]-a[1]).map(([label,value])=>({label, value}));
+  bars($("#branchBars"), brRows, Math.max(1, ...brRows.map(r=>r.value)), false);
+
+  const adv = $("#advice"); adv.textContent = "";
+  const tips = [];
+  const lag = Object.keys(PLAN).filter(k=>PLAN[k]).map(k=>({k, ratio: bySrc[k]/PLAN[k]})).sort((a,b)=>a.ratio-b.ratio);
+  if (n === 0) tips.push("No registrations yet. Start with the Day 2 ambassador post.");
+  else {
+    tips.push(SRC_LABEL[lag[lag.length-1].k] + " is the strongest channel against plan. Put more of Day 5–6 effort here.");
+    tips.push(SRC_LABEL[lag[0].k] + " is furthest behind plan (" + bySrc[lag[0].k] + " of " + PLAN[lag[0].k] + "). Fix or cut it by Day 4.");
+    const ambCount = {}; regs.forEach(r => { if (r.amb) ambCount[r.amb] = (ambCount[r.amb]||0)+1; });
+    const idle = data.ambs.filter(a => !ambCount[a.code]).length;
+    if (idle) tips.push(idle + " ambassador" + (idle>1?"s have":" has") + " no sign-ups yet. Message them the Day 4 post today.");
+    if (n && regs.filter(r=>r.ref).length/n < 0.2) tips.push("Referrals are under 20% of sign-ups. Remind registrants about the 3-friend bonus pack.");
+    const need = GOAL - n; if (need > 0) tips.push(need + " more registrations needed to hit 500.");
+  }
+  tips.forEach(t => adv.appendChild(el("li", null, t)));
+}
+
+function renderAll(){ renderSeats(); renderBoard(); renderPass(); renderTemplates(); renderDash(); }
+renderAll();
+init();
+})();
+</script>
+</body>
+</html>
